@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Background Color</title>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            color: white;
+            font-size: 2em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    Click anywhere to change the background color!
+
+    <script>
+        document.body.addEventListener('click', () => {
+            const randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+            document.body.style.backgroundColor = randomColor;
+        });
+    </script>
+</body>
+</html>
