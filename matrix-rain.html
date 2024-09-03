@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Rain</title>
+    <style>
+        /* Remove default margins and ensure the canvas takes up the full screen */
+        body {
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            background-color: black; /* Set background color to black */
+        }
+
+        /* Ensure the canvas element takes up the full viewport */
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas element where the Matrix rain effect will be drawn -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size to match the window size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Characters to be used in the Matrix rain effect
+        const matrixCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%';
+        const fontSize = 16; // Font size for the characters
+        const columns = canvas.width / fontSize; // Number of columns to fit the canvas width
+
+        // Array to store the y-coordinate for each column (initially set to the height of the canvas)
+		// To prevent all characters falling all at once when the page initially loads
+        const drops = Array(Math.floor(columns)).fill(canvas.height);
+
+        // Draw the Matrix rain effect
+        function drawMatrixRain() {
+            // Slightly fade the entire canvas by drawing a translucent black rectangle
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Set the text color and font size
+            ctx.fillStyle = '#0F0'; // Green color for the characters
+            ctx.font = `${fontSize}px monospace`; // Monospace font for a Matrix-like appearance
+
+            // Loop through each column and draw a character
+            drops.forEach((y, index) => {
+                // Select a random character from the matrixCharacters string
+                const text = matrixCharacters.charAt(Math.floor(Math.random() * matrixCharacters.length));
+
+                // Calculate the x-coordinate based on the column index
+                const x = index * fontSize;
+
+                // Draw the character at the (x, y) position
+                ctx.fillText(text, x, y * fontSize);
+
+                // Reset drop to the top after it moves off the screen
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[index] = 0;
+                }
+
+                // Move the drop down by one character height
+                drops[index]++;
+            });
+        }
+
+        // Continuously update and redraw the Matrix rain effect
+        setInterval(drawMatrixRain, 50);
+
+        // Handle window resizing by adjusting the canvas size and recalculating columns
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drops.length = Math.floor(canvas.width / fontSize); // Recalculate columns
+            drops.fill(0); // Reset all drops to the top
+        });
+    </script>
+</body>
+</html>
